@@ -9,11 +9,15 @@ const sendErrorDev = function (err, res) {
 
 const sendErrorProd = function (err, res) {
   if (err.isOperational) {
+    return res.status(err.statusCode).json({
+      status: err.status,
+      message: err.message,
+    });
+  } else {
     return res.status(500).json({
       status: "Error",
       message: "Something went wrong!",
     });
-  } else {
   }
 };
 
