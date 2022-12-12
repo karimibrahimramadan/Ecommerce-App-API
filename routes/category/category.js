@@ -1,5 +1,8 @@
 const router = require("express").Router();
 const categoryController = require("../../controllers/categoryController");
+const subcategoryRouter = require("../subcategory/subcategory");
+
+router.use("/:categoryId/subcategories", subcategoryRouter);
 
 router.post("/", categoryController.createCategory);
 

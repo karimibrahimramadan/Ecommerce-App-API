@@ -22,6 +22,11 @@ subcategorySchema.pre("save", function (next) {
   next();
 });
 
+subcategorySchema.pre(/^find/, function (next) {
+  this.populate("category", "name");
+  next();
+});
+
 const Subcategory = mongoose.model("Subcategory", subcategorySchema);
 
 module.exports = Subcategory;

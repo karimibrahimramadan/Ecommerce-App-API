@@ -2,13 +2,15 @@ const Category = require("../models/Category");
 const APIFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
+const slugify = require("slugify");
 
 // @desc    Create category
 // @route   POST /api/v1/categories
 // @access  Private
 const createCategory = catchAsync(async (req, res, next) => {
   const newCategory = new Category(req.body);
-  const savedCategory = newCategory.save();
+  const savedCategory = await newCategory.save();
+  console.log(savedCategory);
   res.status(201).json({
     status: "Success",
     message: "Category has been created",
@@ -59,7 +61,12 @@ const getCategory = catchAsync(async (req, res, next) => {
 const updateCategory = catchAsync(async (req, res, next) => {
   const category = await Category.findByIdAndUpdate(
     req.params.categoryId,
-    { $set: req.body },
+    {
+      $set: {
+        name: req.body.name,
+        slug: slugify(req.body.name, { lower: true }),
+      },
+    },
     { new: true }
   );
   if (!category) {
