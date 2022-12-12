@@ -3,6 +3,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const routesController = require("./routes/routesController");
+const errorHandler = require("./controllers/errorController");
 require("colors");
 
 const app = express();
@@ -17,5 +18,8 @@ if (process.env.NODE_ENV === "development") {
 
 // routes
 app.use("/api/v1/categories", routesController.categoryRouter);
+
+// error handler
+app.use(errorHandler);
 
 module.exports = app;
