@@ -2,6 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const routesController = require("./routes/routesController");
 require("colors");
 
 const app = express();
@@ -15,5 +16,6 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // routes
+app.use("/api/v1/categories", routesController.categoryRouter);
 
 module.exports = app;
