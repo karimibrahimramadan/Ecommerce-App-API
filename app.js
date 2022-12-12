@@ -18,6 +18,12 @@ if (process.env.NODE_ENV === "development") {
 
 // routes
 app.use("/api/v1/categories", routesController.categoryRouter);
+app.all("*", (req, res, next) => {
+  res.status(404).json({
+    status: "Fail",
+    message: `${req.originalUrl} Not Found`,
+  });
+});
 
 // error handler
 app.use(errorHandler);
