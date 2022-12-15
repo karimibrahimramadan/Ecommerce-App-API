@@ -32,6 +32,7 @@ const productSchema = new mongoose.Schema(
     ratingAverage: { type: Number, default: 0, min: 1, max: 5 },
     ratingCount: { type: Number, default: 0 },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

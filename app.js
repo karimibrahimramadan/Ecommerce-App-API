@@ -17,7 +17,9 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // routes
+app.use("/api/v1/brands", routesController.brandRouter);
 app.use("/api/v1/categories", routesController.categoryRouter);
+app.use("/api/v1/products", routesController.productRouter);
 app.use("/api/v1/subcategories", routesController.subcategoryRouter);
 app.use("/api/v1/users", routesController.userRouter);
 app.all("*", (req, res, next) => {
