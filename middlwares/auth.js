@@ -18,7 +18,7 @@ const protect = catchAsync(async (req, res, next) => {
     return next(new AppError("Token is invalid or has expired", 400));
   }
   const user = await User.findById(decoded.id);
-  console.log(decoded);
+  // console.log(decoded);
   if (!user) {
     return next(new AppError("User not found", 404));
   }
