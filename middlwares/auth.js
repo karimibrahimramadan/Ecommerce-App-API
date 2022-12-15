@@ -32,11 +32,13 @@ const protect = catchAsync(async (req, res, next) => {
 });
 
 const restrictTo = (...roles) => {
-  if (!roles.includes(req.user.role)) {
-    return next(new AppError("Unauthorized", 403));
-  } else {
-    next();
-  }
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(new AppError("Unauthorized", 403));
+    } else {
+      next();
+    }
+  };
 };
 
 module.exports = {
