@@ -23,6 +23,7 @@ const signup = catchAsync(async (req, res, next) => {
     data: {
       user: savedUser,
     },
+    token,
   });
 });
 
@@ -30,7 +31,7 @@ const signup = catchAsync(async (req, res, next) => {
 // @route   GET /api/v1/users/confirm-email/:token
 // @access  Private
 const confirmEmail = catchAsync(async (req, res, next) => {
-  const token = req.params;
+  const { token } = req.params;
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   if (!decoded) {
     return next(new AppError("Token is invalid or has expired", 400));
