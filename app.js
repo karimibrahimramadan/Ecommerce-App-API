@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const routesController = require("./routes/routesController");
 const errorHandler = require("./controllers/errorController");
 require("colors");
+const path = require("path");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
 
 // routes
 app.use("/api/v1/brands", routesController.brandRouter);

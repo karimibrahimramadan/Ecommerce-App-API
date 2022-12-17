@@ -1,7 +1,10 @@
 const router = require("express").Router();
 const authController = require("../../controllers/authController");
+const userController = require("../../controllers/userController");
 const { protect } = require("../../middlwares/auth");
+const multerErrHandler = require("../../middlwares/multerErrorHandler");
 const validation = require("../../middlwares/validation");
+const { upload, fileValidation } = require("../../utils/multer");
 const validators = require("./userValidation");
 
 router.post(
@@ -30,11 +33,21 @@ router.patch(
   authController.resetPassword
 );
 
+router.use(protect);
+
 router.patch(
   "/me/updatepassword",
-  protect,
   validation(validators.updatepasswordValidation),
   authController.updatePassword
+);
+
+router.get("/me/profile", userController.getMe);
+
+router.patch(
+  "/me/profilepic",
+  upload("users/profile", fileValidation.image).single("image"),
+  multerErrHandler,
+  userController.uploadProfilePic
 );
 
 module.exports = router;

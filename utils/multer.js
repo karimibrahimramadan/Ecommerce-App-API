@@ -11,9 +11,13 @@ const upload = function (customPath, customValidation) {
     customPath = "general";
   }
   const fullPath = path.join(__dirname, `../uploads/${customPath}`);
+  if (!fs.existsSync(fullPath)) {
+    fs.mkdirSync(fullPath, { recursive: true });
+  }
+  console.log(fullPath);
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, `/uploads/${customPath}`);
+      cb(null, fullPath);
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
