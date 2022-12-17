@@ -5,7 +5,6 @@ const catchAsync = require("../utils/catchAsync");
 // @route   GET /api/v1/users/me/profile
 // @access  Private
 const getMe = catchAsync(async (req, res, next) => {
-  console.log(req.user);
   const user = await User.findById(req.user.id);
   res.status(200).json({
     status: "Success",
@@ -19,7 +18,7 @@ const getMe = catchAsync(async (req, res, next) => {
 // @route   PATCH /api/v1/users/me/profilepic
 // @access  Private
 const uploadProfilePic = catchAsync(async (req, res, next) => {
-  const imageUrl = req.file.path.split("Ecommerce/")[1];
+  const imageUrl = `${req.dest}/${req.file.filename}`;
   const user = await User.findByIdAndUpdate(
     req.user.id,
     { $set: { profileImage: imageUrl } },

@@ -17,6 +17,7 @@ const upload = function (customPath, customValidation) {
   console.log(fullPath);
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
+      req.dest = `uploads/${customPath}`;
       cb(null, fullPath);
     },
     filename: function (req, file, cb) {
