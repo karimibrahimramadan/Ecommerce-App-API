@@ -1,10 +1,14 @@
 const router = require("express").Router({ mergeParams: true });
 const subcategoryController = require("../../controllers/subcategoryController");
+const multerErrHandler = require("../../middlwares/multerErrorHandler");
 const validation = require("../../middlwares/validation");
+const { upload, fileValidation } = require("../../utils/multer");
 const validators = require("./subcategoryValidation");
 
 router.post(
   "/",
+  upload("subcategory", fileValidation.image).single("image"),
+  // multerErrHandler,
   validation(validators.createSubcategoryValidation),
   subcategoryController.createSubcategory
 );
@@ -16,19 +20,21 @@ router.get(
 );
 
 router.get(
-  "/:subcategoryId",
+  "/:id",
   validation(validators.getSubcategoryValidation),
   subcategoryController.getSubcategory
 );
 
 router.patch(
-  "/:subcategoryId",
+  "/:id",
+  upload("subcategory", fileValidation.image).single("image"),
+  // multerErrHandler,
   validation(validators.updateSubcategoryValidation),
   subcategoryController.updateSubcategory
 );
 
 router.delete(
-  "/:subcategoryId",
+  "/:id",
   validation(validators.deleteSubcategoryValidation),
   subcategoryController.deleteSubcategory
 );

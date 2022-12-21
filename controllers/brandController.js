@@ -1,63 +1,32 @@
 const Brand = require("../models/Brand");
-const APIFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const slugify = require("slugify");
+const factoryHandler = require("./factoryController");
 
 // @desc    Add new brand
 // @route   POST /api/v1/brands
 // @access  Private
-const addBrand = catchAsync(async (req, res, next) => {
-  const newBrand = new Brand(req.body);
-  const savedBrand = await newBrand.save();
-  res.status(201).json({
-    status: "Success",
-    data: {
-      brand: savedBrand,
-    },
-  });
-});
+const addBrand = factoryHandler.createOne(Brand);
 
 // @desc    Get brand
-// @route   GET /api/v1/brands/:brandId
+// @route   GET /api/v1/brands/:id
 // @access  Private
-const getBrand = catchAsync(async (req, res, next) => {
-  const brand = await Brand.findById(req.params.brandId);
-  if (!brand) {
-    return next(new AppError("Brand not found", 404));
-  }
-  res.status(200).json({
-    status: "Success",
-    data: {
-      brand,
-    },
-  });
-});
+const getBrand = factoryHandler.getOne(Brand);
 
 // @desc    Get all brands
 // @route   GET /api/v1/brands
 // @access  Private
-const getAllBrands = catchAsync(async (req, res, next) => {
-  const apiFeatures = new APIFeatures(Brand.find(), req.query)
-    .search()
-    .sort()
-    .limitFields()
-    .filter()
-    .paginate();
-  const brands = await apiFeatures.query;
-  res.status(200).json({
-    status: "Success",
-    results: brands.length,
-    data: {
-      brands,
-    },
-  });
-});
+const getAllBrands = factoryHandler.getAll(Brand);
 
 // @desc    Update brand
-// @route   PATCH /api/v1/brands/:brandId
+// @route   PATCH /api/v1/brands/:id
 // @access  Private
 const updateBrand = catchAsync(async (req, res, next) => {
+  let image;
+  if (req.file) {
+    image = `${req.dest}/${req.file.filename}`;
+  }
   const brand = await Brand.findByIdAndUpdate(
     req.params.brandId,
     {
@@ -80,17 +49,10 @@ const updateBrand = catchAsync(async (req, res, next) => {
   });
 });
 
-const deleteBrand = catchAsync(async (req, res, next) => {
-  const brand = await Brand.findByIdAndDelete(req.params.brandId);
-  if (!brand) {
-    return next(new AppError("Brand not found", 404));
-  }
-  res.status(204).json({
-    status: "Success",
-    message: "Brand has been deleted",
-    data: null,
-  });
-});
+// @desc    Delete brand
+// @route   DELETE /api/v1/brands/:id
+// @access  Private
+const deleteBrand = factoryHandler.deleteOne(Brand);
 
 module.exports = {
   addBrand,

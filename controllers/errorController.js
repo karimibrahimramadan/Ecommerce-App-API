@@ -6,6 +6,11 @@ const handleDuplicateFieldsDB = function (err) {
   return new AppError(message, err.statusCode);
 };
 
+const handleUnexpectedFields = function (err) {
+  const message = `Number of fields exceeded the max count`;
+  return new AppError(message, err.statusCode);
+};
+
 const sendErrorDev = function (err, res) {
   return res.status(err.statusCode).json({
     status: err.status,
@@ -37,6 +42,8 @@ const errorHandler = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === "production") {
     let error = { ...err };
     if (err.code === 11000) error = handleDuplicateFieldsDB(err);
+    if (err.code === "LIMIT_UNEXPECTED_FILE")
+      error = handleUnexpectedFields(err);
     sendErrorProd(error, res);
   }
 };

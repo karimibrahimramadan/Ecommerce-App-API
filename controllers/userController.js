@@ -18,7 +18,9 @@ const getMe = catchAsync(async (req, res, next) => {
 // @route   PATCH /api/v1/users/me/profilepic
 // @access  Private
 const uploadProfilePic = catchAsync(async (req, res, next) => {
-  const imageUrl = `${req.dest}/${req.file.filename}`;
+  const imageUrl = `${req.protocol}/${req.get("host")}/${req.dest}/${
+    req.file.filename
+  }`;
   const user = await User.findByIdAndUpdate(
     req.user.id,
     { $set: { profileImage: imageUrl } },

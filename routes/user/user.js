@@ -46,7 +46,7 @@ router.get("/me/profile", userController.getMe);
 router.patch(
   "/me/profilepic",
   upload("users/profile", fileValidation.image).single("image"),
-  multerErrHandler,
+  // multerErrHandler,
   userController.uploadProfilePic
 );
 

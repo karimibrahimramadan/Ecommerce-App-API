@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const AppError = require("./appError");
 
 const fileValidation = {
   image: ["image/png", "image/jpeg"],
@@ -29,7 +30,7 @@ const upload = function (customPath, customValidation) {
     if (customValidation.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(null, false);
+      cb(new AppError("Invalid file format", 400), false);
     }
   };
   const uplodas = multer({ dest: fullPath, fileFilter, storage });

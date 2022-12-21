@@ -1,7 +1,9 @@
 const router = require("express").Router();
 const brandController = require("../../controllers/brandController");
 const { protect, restrictTo } = require("../../middlwares/auth");
+const multerErrHandler = require("../../middlwares/multerErrorHandler");
 const validation = require("../../middlwares/validation");
+const { upload, fileValidation } = require("../../utils/multer");
 const validators = require("./brandValidation");
 
 router.use(protect);
@@ -10,6 +12,8 @@ router.use(restrictTo("admin"));
 
 router.post(
   "/",
+  upload("brand", fileValidation.image).single("image"),
+  // multerErrHandler,
   validation(validators.addBrandValidation),
   brandController.addBrand
 );
@@ -17,19 +21,21 @@ router.post(
 router.get("/", brandController.getAllBrands);
 
 router.get(
-  "/:brandId",
+  "/:id",
   validation(validators.getBrandValidation),
   brandController.getBrand
 );
 
 router.patch(
-  "/:brandId",
+  "/:id",
+  upload("brand", fileValidation.image).single("image"),
+  // multerErrHandler,
   validation(validators.updateBrandValidation),
   brandController.updateBrand
 );
 
 router.delete(
-  "/:brandId",
+  "/:id",
   validation(validators.deleteBrandValidation),
   brandController.deleteBrand
 );

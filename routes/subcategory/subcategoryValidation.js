@@ -5,6 +5,7 @@ const createSubcategoryValidation = {
     .required()
     .keys({
       name: Joi.string().min(3).required(),
+      category: Joi.string().hex().length(24),
     }),
 };
 
@@ -12,7 +13,7 @@ const getSubcategoryValidation = {
   params: Joi.object()
     .required()
     .keys({
-      subcategoryId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     }),
 };
 
@@ -20,7 +21,7 @@ const getAllSubcategoriesValidation = {
   params: Joi.object()
     .required()
     .keys({
-      categoryId: Joi.string().hex().length(24),
+      id: Joi.string().hex().length(24),
     })
     .options({ allowUnknown: true }),
 };
@@ -34,7 +35,7 @@ const updateSubcategoryValidation = {
   params: Joi.object()
     .required()
     .keys({
-      subcategoryId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };
@@ -43,7 +44,7 @@ const deleteSubcategoryValidation = {
   params: Joi.object()
     .required()
     .keys({
-      subcategoryId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };

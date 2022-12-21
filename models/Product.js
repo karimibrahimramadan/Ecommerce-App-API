@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema(
     category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
     subcategory: { type: mongoose.Schema.Types.ObjectId, ref: "Subcategory" },
     brand: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
-    ratingAverage: { type: Number, default: 0, min: 1, max: 5 },
+    ratingAverage: { type: Number, default: 0, min: 0, max: 5 },
     ratingCount: { type: Number, default: 0 },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

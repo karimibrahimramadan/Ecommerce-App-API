@@ -3,34 +3,42 @@ const categoryController = require("../../controllers/categoryController");
 const subcategoryRouter = require("../subcategory/subcategory");
 const validation = require("../../middlwares/validation");
 const validators = require("./categoryValidation");
-const { protect } = require("../../middlwares/auth");
+const { protect, restrictTo } = require("../../middlwares/auth");
+const { upload, fileValidation } = require("../../utils/multer");
+const multerErrHandler = require("../../middlwares/multerErrorHandler");
 
 router.use(protect);
 
 router.use("/:categoryId/subcategories", subcategoryRouter);
 
-router.post(
-  "/",
-  validation(validators.createCategoryValidation),
-  categoryController.createCategory
-);
-
 router.get("/", categoryController.getAllCategories);
 
 router.get(
-  "/:categoryId",
+  "/:id",
   validation(validators.getCategoryValidation),
   categoryController.getCategory
 );
 
+router.use(restrictTo("admin", "seller"));
+
+router.post(
+  "/",
+  upload("category", fileValidation.image).single("image"),
+  // multerErrHandler,
+  validation(validators.createCategoryValidation),
+  categoryController.createCategory
+);
+
 router.patch(
-  "/:categoryId",
+  "/:id",
+  upload("category", fileValidation.image).single("image"),
+  // multerErrHandler,
   validation(validators.updateCategoryValidation),
   categoryController.updateCategory
 );
 
 router.delete(
-  "/:categoryId",
+  "/:id",
   validation(validators.deleteCategoryValidation),
   categoryController.deleteCategory
 );

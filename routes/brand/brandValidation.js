@@ -17,7 +17,7 @@ const updateBrandValidation = {
   params: Joi.object()
     .required()
     .keys({
-      brandId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };
@@ -26,7 +26,7 @@ const deleteBrandValidation = {
   params: Joi.object()
     .required()
     .keys({
-      brandId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };
@@ -35,7 +35,7 @@ const getBrandValidation = {
   params: Joi.object()
     .required()
     .keys({
-      brandId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };

@@ -2,12 +2,28 @@ const Product = require("../models/Product");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const slugify = require("slugify");
-const APIFeatures = require("../utils/apiFeatures");
+const factoryHandler = require("./factoryController");
 
 // @desc    Create new product
 // @route   POST /api/v1/products
 // @access  Private
 const createProduct = catchAsync(async (req, res, next) => {
+  let imageArr = [];
+  if (req.files) {
+    req.files.images
+      ? req.files.images.forEach((file) => {
+          imageArr.push(
+            `${req.protocol}/${req.get("host")}/${req.dest}/${file.filename}`
+          );
+        })
+      : [];
+    req.body.images = imageArr;
+    req.body.imageCover = req.files.imageCover
+      ? `${req.protocol}/${req.get("host")}/${req.dest}/${
+          req.files.imageCover[0].filename
+        }`
+      : "";
+  }
   req.body.seller = req.user.id;
   const newProduct = new Product(req.body);
   const savedProduct = await newProduct.save();
@@ -21,11 +37,13 @@ const createProduct = catchAsync(async (req, res, next) => {
 });
 
 // @desc    Update product
-// @route   PATCH /api/v1/products/:productId
+// @route   PATCH /api/v1/products/:id
 // @access  Private
 const updateProduct = catchAsync(async (req, res, next) => {
   if (req.body.name) {
     req.body.slug = slugify(req.body.name, { lower: true });
+  }
+  if (req.file) {
   }
   const product = await Product.findByIdAndUpdate(
     req.params.productId,
@@ -47,52 +65,17 @@ const updateProduct = catchAsync(async (req, res, next) => {
 // @desc    Get all products
 // @route   GET /api/v1/products
 // @access  Private
-const getAllProducts = catchAsync(async (req, res, next) => {
-  const apiFeatures = new APIFeatures(Product.find(), req.query)
-    .search()
-    .sort()
-    .filter()
-    .limitFields()
-    .paginate();
-  const products = await apiFeatures.query;
-  res.status(200).json({
-    status: "Success",
-    data: {
-      products,
-    },
-  });
-});
+const getAllProducts = factoryHandler.getAll(Product);
 
 // @desc    Get product
-// @route   GET /api/v1/products/:productId
+// @route   GET /api/v1/products/:id
 // @access  Private
-const getProduct = catchAsync(async (req, res, next) => {
-  const product = await Product.findById(req.params.productId);
-  if (!product) {
-    return next(new AppError("Product not found", 404));
-  }
-  res.status(200).json({
-    status: "Success",
-    data: {
-      product,
-    },
-  });
-});
+const getProduct = factoryHandler.getOne(Product);
 
 // @desc    Delete product
-// @route   DELETE /api/v1/products/:productId
+// @route   DELETE /api/v1/products/:id
 // @access  Private
-const deleteProduct = catchAsync(async (req, res, next) => {
-  const product = await Product.findByIdAndDelete(req.params.productId);
-  if (!product) {
-    return next(new AppError("Product not found", 404));
-  }
-  res.status(204).json({
-    status: "Success",
-    message: "Product has been deleted",
-    data: null,
-  });
-});
+const deleteProduct = factoryHandler.deleteOne(Product);
 
 module.exports = {
   createProduct,

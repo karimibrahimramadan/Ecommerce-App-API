@@ -40,7 +40,7 @@ const updateProductValidation = {
   params: Joi.object()
     .required()
     .keys({
-      productId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };
@@ -49,7 +49,7 @@ const getProductValidation = {
   params: Joi.object()
     .required()
     .keys({
-      productId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };
@@ -58,7 +58,7 @@ const deleteProductValidation = {
   params: Joi.object()
     .required()
     .keys({
-      productId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };
