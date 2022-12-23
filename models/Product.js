@@ -31,11 +31,21 @@ const productSchema = new mongoose.Schema(
     brand: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
     ratingAverage: { type: Number, default: 0, min: 0, max: 5 },
     ratingCount: { type: Number, default: 0 },
-    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+productSchema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "product",
+});
+
+productSchema.pre(/^find/, function (next) {
+  this.populate("reviews", "user profileImage review rating -product");
+  next();
+});
 
 productSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });

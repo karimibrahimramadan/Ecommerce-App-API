@@ -4,7 +4,7 @@ const signupValidation = {
   body: Joi.object()
     .required()
     .keys({
-      name: Joi.string().required(),
+      name: Joi.string().min(3).required(),
       email: Joi.string().lowercase().email().required(),
       password: Joi.string().pattern(new RegExp()).required(),
       confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
@@ -43,10 +43,49 @@ const updatepasswordValidation = {
     }),
 };
 
+const getUser = {
+  params: Joi.object()
+    .required()
+    .keys({
+      id: Joi.string().hex().length(24).required(),
+    })
+    .options({ allowUnknown: true }),
+};
+
+const deleteUser = {
+  params: Joi.object()
+    .required()
+    .keys({
+      id: Joi.string().hex().length(24).required(),
+    })
+    .options({ allowUnknown: true }),
+};
+
+const updateUser = {
+  body: Joi.object()
+    .required()
+    .keys({
+      name: Joi.string().min(3),
+      email: Joi.string().email(),
+      role: Joi.string().valid("admin", "seller", "user"),
+      phone: Joi.string(),
+      active: Joi.boolean().default(false),
+    }),
+  params: Joi.object()
+    .required()
+    .keys({
+      id: Joi.string().hex().length(24).required(),
+    })
+    .options({ allowUnknown: true }),
+};
+
 module.exports = {
   signupValidation,
   loginValidation,
   forgotpasswordValidation,
   resetpasswordValidation,
   updatepasswordValidation,
+  getUser,
+  updateUser,
+  deleteUser,
 };

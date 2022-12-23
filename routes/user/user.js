@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const authController = require("../../controllers/authController");
 const userController = require("../../controllers/userController");
-const { protect } = require("../../middlwares/auth");
+const { protect, restrictTo } = require("../../middlwares/auth");
 const multerErrHandler = require("../../middlwares/multerErrorHandler");
 const validation = require("../../middlwares/validation");
 const { upload, fileValidation } = require("../../utils/multer");
@@ -48,6 +48,24 @@ router.patch(
   upload("users/profile", fileValidation.image).single("image"),
   // multerErrHandler,
   userController.uploadProfilePic
+);
+
+router.use(restrictTo("admin"));
+
+router.get("/find", userController.getAllUsers);
+
+router.get("/find/:id", validation(validators.getUser), userController.getUser);
+
+router.patch(
+  "/update/:id",
+  validation(validators.updateUser),
+  userController.updateUser
+);
+
+router.delete(
+  "/delete/:id",
+  validation(validators.deleteUser),
+  userController.deleteUser
 );
 
 module.exports = router;

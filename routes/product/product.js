@@ -5,6 +5,9 @@ const multerErrHandler = require("../../middlwares/multerErrorHandler");
 const validation = require("../../middlwares/validation");
 const { upload, fileValidation } = require("../../utils/multer");
 const validators = require("./productValidation");
+const reviewRouter = require("../review/review");
+
+router.use("/:productId/reviews", reviewRouter);
 
 router.use(protect);
 

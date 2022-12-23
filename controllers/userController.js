@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const catchAsync = require("../utils/catchAsync");
+const factoryHandler = require("./factoryController");
 
 // @desc    Get user's profile
 // @route   GET /api/v1/users/me/profile
@@ -51,8 +52,32 @@ const deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
+// @desc    Get all users
+// @route   GET /api/v1/users/find
+// @access  Private
+const getAllUsers = factoryHandler.getAll(User);
+
+// @desc    Get user
+// @route   GET /api/v1/users/find/:id
+// @access  Private
+const getUser = factoryHandler.getOne(User);
+
+// @desc    Update user
+// @route   PATCH /api/v1/users/update/:id
+// @access  Private
+const updateUser = factoryHandler.updateOne(User);
+
+// @desc    Delete user
+// @route   DELETE /api/v1/users/delete/:id
+// @access  Private
+const deleteUser = factoryHandler.updateOne(User);
+
 module.exports = {
   getMe,
   uploadProfilePic,
   deleteMe,
+  getAllUsers,
+  getUser,
+  updateUser,
+  deleteUser,
 };

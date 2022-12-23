@@ -31,13 +31,23 @@ const getOne = (Model) => {
   });
 };
 
-const getAll = (Model) => {
+const getAll = (Model, num) => {
   return catchAsync(async (req, res, next) => {
-    const filterObj = req.params.categoryId
-      ? {
-          category: req.params.categoryId,
-        }
-      : {};
+    let filterObj;
+    switch (num) {
+      case 1:
+        filterObj = req.params.categoryId
+          ? {
+              category: req.params.categoryId,
+            }
+          : {};
+        break;
+      case 2:
+        filterObj = req.params.productId
+          ? { product: req.params.productId }
+          : {};
+        break;
+    }
     const apiFeatures = new APIFeatures(Model.find(filterObj), req.query)
       .filter()
       .limitFields()
@@ -72,15 +82,31 @@ const createOne = (Model) => {
   });
 };
 
-// const updateOne = (Model, id) => {
-//   return catchAsync(async (req, res, next) => {
-//     const doc = await Model.findByIdAndUpdate(id)
-//   })
-// }
+const updateOne = (Model) => {
+  return catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const doc = await Model.findByIdAndUpdate(
+      id,
+      { $set: req.body },
+      { new: true }
+    );
+    if (!doc) {
+      return next(new AppError(`${Model} not found`, 404));
+    }
+    res.status(200).json({
+      status: "Success",
+      message: "Document has been updated",
+      data: {
+        doc,
+      },
+    });
+  });
+};
 
 module.exports = {
   createOne,
   deleteOne,
   getAll,
   getOne,
+  updateOne,
 };

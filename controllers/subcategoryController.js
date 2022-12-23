@@ -33,7 +33,7 @@ const createSubcategory = factoryHandler.createOne(Subcategory);
 //     },
 //   });
 // });
-const getAllSubcategories = factoryHandler.getAll(Subcategory);
+const getAllSubcategories = factoryHandler.getAll(Subcategory, 1);
 
 // @desc    Get subcategory
 // @route   GET /api/v1/subcategories/:subcategoryId
