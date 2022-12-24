@@ -19,7 +19,7 @@ const getMe = catchAsync(async (req, res, next) => {
 // @route   PATCH /api/v1/users/me/profilepic
 // @access  Private
 const uploadProfilePic = catchAsync(async (req, res, next) => {
-  const imageUrl = `${req.protocol}/${req.get("host")}/${req.dest}/${
+  const imageUrl = `${req.protocol}://${req.get("host")}/${req.dest}/${
     req.file.filename
   }`;
   const user = await User.findByIdAndUpdate(
@@ -72,6 +72,69 @@ const updateUser = factoryHandler.updateOne(User);
 // @access  Private
 const deleteUser = factoryHandler.updateOne(User);
 
+const addToWishlist = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $addToSet: { wishList: req.body.product },
+    },
+    { new: true }
+  );
+  res.status(200).json({
+    status: "Success",
+    data: {
+      user,
+    },
+  });
+});
+
+const removeFromWishlist = catchAsync(async (req, res, next) => {
+  const filterObj = req.body.product
+    ? { $pull: { wishList: req.body.product } }
+    : { $set: { wishList: [] } };
+  const user = await User.findByIdAndUpdate(req.user.id, filterObj, {
+    new: true,
+  });
+  res.status(200).json({
+    status: "Success",
+    data: {
+      user,
+    },
+  });
+});
+
+const addAddress = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { $addToSet: { addresses: req.body.address } },
+    { new: true }
+  );
+  res.status(200).json({
+    status: "Success",
+    message: "Address has been added",
+    data: {
+      user,
+    },
+  });
+});
+
+const removeAddress = catchAsync(async (req, res, next) => {
+  const filterObj = req.body.address
+    ? { $pull: { addresses: { _id: req.body.address } } }
+    : { $set: { addresses: [] } };
+  const user = await User.findByIdAndUpdate(req.user.id, filterObj, {
+    new: true,
+  });
+  let message = req.body.address ? "Address" : "Addresses";
+  res.status(200).json({
+    status: "Success",
+    message: `${message} has been removed`,
+    data: {
+      user,
+    },
+  });
+});
+
 module.exports = {
   getMe,
   uploadProfilePic,
@@ -80,4 +143,8 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
+  addToWishlist,
+  removeFromWishlist,
+  addAddress,
+  removeAddress,
 };

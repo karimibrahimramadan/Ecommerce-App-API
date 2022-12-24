@@ -46,8 +46,31 @@ router.get("/me/profile", userController.getMe);
 router.patch(
   "/me/profilepic",
   upload("users/profile", fileValidation.image).single("image"),
-  // multerErrHandler,
   userController.uploadProfilePic
+);
+
+router.patch(
+  "/wishlist",
+  validation(validators.addToWishlist),
+  userController.addToWishlist
+);
+
+router.delete(
+  "/wishlist",
+  validation(validators.removeFromWishlist),
+  userController.removeFromWishlist
+);
+
+router.patch(
+  "/address",
+  validation(validators.addAddress),
+  userController.addAddress
+);
+
+router.delete(
+  "/address",
+  validation(validators.removeAddress),
+  userController.removeAddress
 );
 
 router.use(restrictTo("admin"));

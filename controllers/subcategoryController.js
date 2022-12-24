@@ -43,34 +43,7 @@ const getSubcategory = factoryHandler.getOne(Subcategory);
 // @desc    Update subcategory
 // @route   PATCH /api/v1/subcategories/:subcategoryId
 // @access  Private
-const updateSubcategory = catchAsync(async (req, res, next) => {
-  let image;
-  if (req.file) {
-    image = `${req.file}/${req.file.filename}`;
-  }
-  const subcategory = await Subcategory.findByIdAndUpdate(
-    req.params.subcategoryId,
-    {
-      $set: {
-        name: req.body.name,
-        slug: slugify(req.body.name, { lower: true }),
-        image,
-      },
-    },
-    { new: true }
-  );
-  console.log(subcategory);
-  if (!subcategory) {
-    return next(new AppError("Subcategory doesn't exist", 404));
-  }
-  res.status(200).json({
-    status: "Success",
-    message: "Subcategory has been updated",
-    data: {
-      subcategory,
-    },
-  });
-});
+const updateSubcategory = factoryHandler.updateOne(Subcategory);
 
 // @desc    Delete subcategory
 // @route   DELETE /api/v1/subcategories/:subcategoryId

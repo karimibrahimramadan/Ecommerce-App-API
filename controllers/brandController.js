@@ -22,32 +22,33 @@ const getAllBrands = factoryHandler.getAll(Brand);
 // @desc    Update brand
 // @route   PATCH /api/v1/brands/:id
 // @access  Private
-const updateBrand = catchAsync(async (req, res, next) => {
-  let image;
-  if (req.file) {
-    image = `${req.dest}/${req.file.filename}`;
-  }
-  const brand = await Brand.findByIdAndUpdate(
-    req.params.brandId,
-    {
-      $set: {
-        name: req.body.name,
-        slug: slugify(req.body.name, { lower: true }),
-      },
-    },
-    { new: true }
-  );
-  if (!brand) {
-    return next(new AppError("Brand not found", 404));
-  }
-  res.status(200).json({
-    status: "Success",
-    message: "Brand has been updated",
-    data: {
-      brand,
-    },
-  });
-});
+// const updateBrand = catchAsync(async (req, res, next) => {
+//   let image;
+//   if (req.file) {
+//     image = `${req.dest}/${req.file.filename}`;
+//   }
+//   const brand = await Brand.findByIdAndUpdate(
+//     req.params.brandId,
+//     {
+//       $set: {
+//         name: req.body.name,
+//         slug: slugify(req.body.name, { lower: true }),
+//       },
+//     },
+//     { new: true }
+//   );
+//   if (!brand) {
+//     return next(new AppError("Brand not found", 404));
+//   }
+//   res.status(200).json({
+//     status: "Success",
+//     message: "Brand has been updated",
+//     data: {
+//       brand,
+//     },
+//   });
+// });
+const updateBrand = factoryHandler.updateOne(Brand);
 
 // @desc    Delete brand
 // @route   DELETE /api/v1/brands/:id

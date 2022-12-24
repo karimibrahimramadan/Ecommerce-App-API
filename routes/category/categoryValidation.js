@@ -17,7 +17,7 @@ const updateCategoryValidation = {
   params: Joi.object()
     .required()
     .keys({
-      categoryId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };
@@ -26,7 +26,7 @@ const getCategoryValidation = {
   params: Joi.object()
     .required()
     .keys({
-      categoryId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };
@@ -35,7 +35,7 @@ const deleteCategoryValidation = {
   params: Joi.object()
     .required()
     .keys({
-      categoryId: Joi.string().hex().length(24).required(),
+      id: Joi.string().hex().length(24).required(),
     })
     .options({ allowUnknown: true }),
 };

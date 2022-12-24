@@ -42,7 +42,7 @@ productSchema.virtual("reviews", {
   foreignField: "product",
 });
 
-productSchema.pre(/^find/, function (next) {
+productSchema.pre("findOne", function (next) {
   this.populate("reviews", "user profileImage review rating -product");
   next();
 });

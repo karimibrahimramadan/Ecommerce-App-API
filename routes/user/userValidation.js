@@ -79,6 +79,41 @@ const updateUser = {
     .options({ allowUnknown: true }),
 };
 
+const addToWishlist = {
+  body: Joi.object()
+    .required()
+    .keys({
+      product: Joi.string().hex().length(24).required(),
+    }),
+};
+
+const removeFromWishlist = {
+  body: Joi.object()
+    .required()
+    .keys({
+      product: Joi.string().hex().length(24),
+    }),
+};
+
+const addAddress = {
+  body: Joi.object()
+    .required()
+    .keys({
+      address: Joi.object().keys({
+        name: Joi.string().required(),
+        street: Joi.string().required(),
+        city: Joi.string().required(),
+        postalCode: Joi.string().required(),
+      }),
+    }),
+};
+
+const removeAddress = {
+  body: Joi.object().keys({
+    address: Joi.string().hex().length(24),
+  }),
+};
+
 module.exports = {
   signupValidation,
   loginValidation,
@@ -88,4 +123,8 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
+  addToWishlist,
+  removeFromWishlist,
+  addAddress,
+  removeAddress,
 };

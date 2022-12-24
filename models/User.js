@@ -30,6 +30,15 @@ const userSchema = new mongoose.Schema(
     passwordResetToken: String,
     passwordResetExpire: Date,
     passwordChangedAt: Date,
+    wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    addresses: [
+      {
+        name: { type: String },
+        street: String,
+        city: String,
+        postalCode: String,
+      },
+    ],
   },
   { timestamps: true }
 );
