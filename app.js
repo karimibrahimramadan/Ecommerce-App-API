@@ -21,6 +21,7 @@ app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
 // routes
 app.use("/api/v1/brands", routesController.brandRouter);
 app.use("/api/v1/categories", routesController.categoryRouter);
+app.use("/api/v1/coupons", routesController.couponRouter);
 app.use("/api/v1/products", routesController.productRouter);
 app.use("/api/v1/reviews", routesController.reviewRouter);
 app.use("/api/v1/subcategories", routesController.subcategoryRouter);
